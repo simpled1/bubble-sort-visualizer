@@ -1,65 +1,13 @@
 /**
- *  =============================================================================
- *   ALGORITHMS.JS
- *  =============================================================================
- *  
- *  Purpose: 
- *  This file contains the "Brain" of the operation. It handles the raw logic 
- *  for generating data and determining the sorting steps. It does NOT touch 
- *  the DOM (HTML) directly.
- *
- *  -----------------------------------------------------------------------------
- *   VISUAL SUMMARY
- *  -----------------------------------------------------------------------------
- *  
- *   [ Random Generator ]  --->  [ Array ]  --->  [ Bubble Sort Logic ]
- *                                                      |
- *                                                      v
- *                                                [ History Log ]
- *                                           (Step-by-step instructions)
- *
- *  -----------------------------------------------------------------------------
- *   STRUCTURAL SHARING (Memory Optimization)
- *  -----------------------------------------------------------------------------
- *  
- *   Standard History:
- *     [Step 1: ARRAY A] -> [Step 2: ARRAY B] -> [Step 3: ARRAY C]
- *     (Every step creates a full copy. Heavy Memory usage!)
- *  
- *   Optimized History:
- *     [Step 1] --+
- *                | (Ref)
- *     [Step 2] --+--> [ ARRAY A ]   (Only create [ARRAY B] when data changes)
- *                |
- *     [Step 3] --+
- * 
+ * Handles core algorithmic logic for sorting.
+ * Generates sorting history steps for visualization.
  */
 
 
 /**
- *  -------------------------------------------------------------------------
- *   generateRandomArray(size)
- *  -------------------------------------------------------------------------
- *  
- *  Goal: Create a list of random numbers.
- *  
- *  Process:
- *  1. Create an empty container (Array).
- *  2. Repeat 'size' times.
- *  3. Pick a random number between 1 and 100.
- *  4. Put it in the container.
- * 
- *  Visualization:
- *  
- *   Input: size = 5
- *   
- *   Loop 1: Random() -> 42  -> [ 42 ]
- *   Loop 2: Random() -> 15  -> [ 42, 15 ]
- *   Loop 3: Random() -> 99  -> [ 42, 15, 99 ]
- *   ...
- * 
- *  @param {number} size - How many bars we want.
- *  @returns {number[]} - The list of random numbers.
+ * Generates an array of random integers between 1 and 100.
+ * @param {number} size - Size of the array.
+ * @returns {number[]} - Array of random numbers.
  */
 export function generateRandomArray(size) {
   // Create an empty array to hold our numbers
@@ -85,40 +33,10 @@ export function generateRandomArray(size) {
 
 
 /**
- *  -------------------------------------------------------------------------
- *   generateBubbleSortHistory(arr)
- *  -------------------------------------------------------------------------
- *  
- *  Goal: Run the Bubble Sort algorithm, but instead of just sorting,
- *        RECORD every single thing that happens (Compare, Swap, Finalize).
- * 
- *  Why? We need this "Recording" (History) so we can replay it later
- *       as an animation.
- * 
- *  The Bubble Sort Algorithm:
- *  Think of it like bubbles rising in water. The heavy (large) numbers
- *  "bubble up" to the top (right side) in each pass.
- * 
- *  Visualization of One Pass:
- *  Array: [ 5, 2, 8 ]
- * 
- *  1. Compare (5, 2)
- *     [ 5, 2, 8 ]
- *       ^  ^
- *       Is 5 > 2? YES! -> SWAP!
- * 
- *  2. Swap
- *     [ 2, 5, 8 ]
- * 
- *  3. Compare (5, 8)
- *     [ 2, 5, 8 ]
- *          ^  ^
- *          Is 5 > 8? NO. -> Keep going.
- * 
- *  4. End of Pass -> 8 is the biggest, it is "Finalized" (Locked).
- * 
- *  @param {number[]} arr - The initial jumbled array.
- *  @returns {object[]} historyLog - A list of "Step Objects" describing the sort.
+ * Generates the history steps for standard Bubble Sort.
+ * Records comparisons, swaps, and finalizations.
+ * @param {number[]} arr - The array to sort.
+ * @returns {object[]} - List of step objects describing the sort.
  */
 export function generateBubbleSortHistory(arr) {
   const historyLog = [];
@@ -127,12 +45,12 @@ export function generateBubbleSortHistory(arr) {
   let currentArraySnapshot = [...arr];
   let currentSortedSnapshot = []; // Start with no bars sorted
 
-  // RECORD INITIAL STATE
+  // Initial state
   historyLog.push({
     type: 'initial',
-    array: currentArraySnapshot, // Snapshot A
+    array: currentArraySnapshot,
     indices: [],
-    sortedIndices: currentSortedSnapshot // Snapshot X
+    sortedIndices: currentSortedSnapshot
   });
 
   const n = currentArraySnapshot.length;
@@ -166,12 +84,12 @@ export function generateBubbleSortHistory(arr) {
         // 3. Update our "Current" pointer
         currentArraySnapshot = newArraySnapshot;
 
-        // -- EVENT: SWAP --
+        // Record swap
         historyLog.push({
           type: 'swap',
           indices: [j, j + 1],
-          array: currentArraySnapshot, // Snapshot B (New Address)
-          sortedIndices: currentSortedSnapshot // Shared Ref (No change yet)
+          array: currentArraySnapshot,
+          sortedIndices: currentSortedSnapshot
         });
       }
     }
@@ -214,29 +132,9 @@ export function generateBubbleSortHistory(arr) {
 
 
 /**
- *  -------------------------------------------------------------------------
- *   generateOptimizedBubbleSortHistory(arr)
- *  -------------------------------------------------------------------------
- *  
- *  Goal: Same as generateBubbleSortHistory, but with OPTIMIZATION!
- *  
- *  Optimization: "Early Exit with Swap Flag"
- *  
- *  How it works:
- *  - Track whether ANY swaps occurred in a pass.
- *  - If NO swaps happened → Array is already sorted → STOP!
- *  
- *  Visualization:
- *  
- *  Pass 1: [ 3, 1, 2 ]  →  Swaps: YES  →  Continue
- *  Pass 2: [ 1, 2, 3 ]  →  Swaps: NO   →  DONE! ✓
- *  
- *  Benefit:
- *  - Best case: O(n) instead of O(n²) for nearly-sorted arrays
- *  - You'll SEE the difference in the visualizer!
- * 
- *  @param {number[]} arr - The initial jumbled array.
- *  @returns {object[]} historyLog - A list of "Step Objects" describing the sort.
+ * Generates history for Optimized Bubble Sort (early exit if no swaps).
+ * @param {number[]} arr - The array to sort.
+ * @returns {object[]} - List of step objects.
  */
 export function generateOptimizedBubbleSortHistory(arr) {
   const historyLog = [];

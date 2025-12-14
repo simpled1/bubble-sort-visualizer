@@ -3,14 +3,8 @@ import { renderStep } from "./display.js";
 import { generateBubbleSortHistory, generateRandomArray, generateOptimizedBubbleSortHistory } from "./algorithms.js";
 import { audioManager } from "./audio.js";
 /**
- *  =============================================================================
- *   CONTROLLER.JS
- *  =============================================================================
- *  
- *  Purpose: 
- *  This file is the "Manager". It coordinates the Workers (Algorithms), 
- *  the Painters (Display), and the Musicians (Audio). It handles User Input
- *  (clicks) and the flow of Time (animation loop).
+ * Main controller for the Bubble Sort Visualizer.
+ * Coordinates the algorithm logic, display rendering, and audio playback.
  */
 
 // =============================================================================
@@ -23,7 +17,7 @@ let ARRAY_SIZE = 20;
 // The raw numbers (e.g., [10, 5, 8])
 let array = [];
 
-// THE SCRIPT: A recorded list of every step needed to sort the array.
+// Holds the pre-calculated sorting frames
 let sortingHistory = [];
 
 // Where are we in the movie? Frame 0, Frame 10, etc.
@@ -56,48 +50,30 @@ const stepCounter = document.getElementById('step-counter'); // Steps: 0 / 100
 
 
 /**
- *  -------------------------------------------------------------------------
- *   init()
- *  -------------------------------------------------------------------------
- *  
- *  Goal: Boot up the machine.
- *  1. Read settings.
- *  2. Generate new data.
- *  3. Prepare the movie script (History).
- *  4. Draw the first frame.
+ * Resets the state and prepares a new sorting simulation.
  */
 function init() {
 
 
-  // 1. INPUT: Get size from user input
+  // Get and clamp size input
   let size = parseInt(arraySizeInput.value, 10);
-
-  // VALIDATION: Clamp values (Keep between 5 and 100)
   if (size > 100) size = 100;
   if (size < 5) size = 5;
 
-  // Update State
+  // Sync state
   ARRAY_SIZE = size;
-  // Update Input (in case we clamped it)
   arraySizeInput.value = size;
 
-  // 2. SAFETY: Stop any running interactions
   pause();
 
-  // 3. GENERATE: Ask algorithms.js for random numbers
+  // Generate new numbers and calculate the sorting path
   array = generateRandomArray(ARRAY_SIZE);
-
-  // 4. PLAN: Calculate the sorting steps
   calculateHistory();
 }
 
 
 /**
- *  -------------------------------------------------------------------------
- *   calculateHistory()
- *  -------------------------------------------------------------------------
- *  Goal: Look at the current array and the checkbox, and decide the path.
- *  This allows us to switch algorithms without losing the data!
+ * Generates the full history of sorting steps based on the selected algorithm.
  */
 function calculateHistory() {
   // 1. SAFETY: Stop running
@@ -106,8 +82,7 @@ function calculateHistory() {
   // 2. CHECK: Should we use the optimized version?
   const useOptimized = optimizedCheckbox.checked;
 
-  // 3. GENERATE SCRIPT
-  // [...array] passes a copy so we don't destroy our master data
+  // Generate the steps without mutating the original array yet
   if (useOptimized) {
     sortingHistory = generateOptimizedBubbleSortHistory([...array]);
   } else {
@@ -124,9 +99,6 @@ function calculateHistory() {
   }
 }
 
-// ... existing code ...
-
-
 /**
  *  -------------------------------------------------------------------------
  *   Playback Controls
@@ -142,21 +114,17 @@ function togglePlay() {
   }
 }
 
-// Function: Start the loop
+// Starts the animation loop
 function play() {
-  // REQUIREMENT: Browsers need a user interaction to start Audio Context
   if (typeof audioManager !== 'undefined') audioManager.init();
 
-  // EDGE CASE: If we are at the end, restart from beginning
+  // Restart if we're already at the end
   if (currentStep >= sortingHistory.length - 1) {
     currentStep = 0;
   }
 
-  // Set flag
   isPlaying = true;
-  playPauseBtn.textContent = 'Pause'; // Update UI Text
-
-  // START ENGINE
+  playPauseBtn.textContent = 'Pause';
   loop();
 }
 
@@ -171,14 +139,8 @@ function pause() {
 
 
 /**
- *  -------------------------------------------------------------------------
- *   loop()  -- THE HEARTBEAT
- *  -------------------------------------------------------------------------
- *  
- *  Goal: Move time forward one step, draw it, wait, and repeat.
- *  
- *  Cycle:
- *  [ Check State ] -> [ Logic/Audio ] -> [ Render ] -> [ Wait ] -> [ Call Loop Again ]
+ * Main animation loop.
+ * Advances the step, renders the frame, plays sound, and schedules the next iteration.
  */
 function loop() {
   // 1. CHECK: Should we be running?
@@ -204,20 +166,13 @@ function loop() {
       if (frame.type === 'finalized') audioManager.playSorted();   // Chime
     }
 
-    // TIMING: Calculate how long to wait
-    // Speed Slider: 1 (Slow) to 100 (Fast)
+    // Calculate delay (inverted logic: higher speed = lower delay)
+    // Scale: 100 (fastest) -> 1ms, 1 (slowest) -> 500ms
     const speed = parseInt(speedSlider.value, 10);
-
-    // Formula: Logarithmic-ish scaling for better control
-    // Speed 100 -> ~1ms delay (Lightning fast)
-    // Speed 1   -> ~500ms delay (Analyze carefully)
     const maxDelay = 500;
     const minDelay = 1;
 
-    // Invert scale: Higher Slider value (100) means LOWER delay
     const delay = maxDelay - ((speed / 100) * (maxDelay - minDelay));
-
-    // SCHEDULE: Call this function again after 'delay' ms
     timeoutId = setTimeout(loop, delay);
 
   } else {

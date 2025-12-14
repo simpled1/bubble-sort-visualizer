@@ -1,42 +1,16 @@
 /**
- *  =============================================================================
- *   AUDIO.JS
- *  =============================================================================
- *  
- *  Purpose: 
- *  This file handles the "Ears" of the operation. It uses the Web Audio API
- *  to generate sounds from scratch (Synthesizer). No mp3 files required!
- * 
- *  -----------------------------------------------------------------------------
- *   VISUAL SUMMARY: THE SYNTHESIZER
- *  -----------------------------------------------------------------------------
- *  
- *    [ Oscillator ]  ---->  [ Gain Node ]  ---->  [ Destination ]
- *   (Generates Wave)       (Volume Knob)          (Speakers/Ears)
- *          |                     |
- *      Frequency              Volume
- *      (Pitch)                (Loudness)
- *  
- *   Wave Variations:
- *   Square ( __|--|__ ) => 8-Bit / Nintendo style
- *   Sine   ( /~\_/~\ ) => Smooth / Pure tone
- * 
+ * Manages real-time audio synthesis using the Web Audio API.
  */
 
 class SoundManager {
-  // Constructor: Runs once when we create the audio manager.
+  // Initializes audio context and settings.
   constructor() {
-    this.ctx = null;          // The "Audio Context" (The Virtual Studio)
     this.isMuted = false;     // Master Mute Switch
     this.oscillatorType = 'square'; // The "Voice" (Square = Nintendo/8-bit sound)
   }
 
   /**
-   *  -------------------------------------------------------------------------
-   *   init()
-   *  -------------------------------------------------------------------------
-   *  Goal: Turn on the studio. Browsers don't allow audio to start until
-   *        the user clicks something. We call this on the first click.
+   * Initializes the AudioContext. Must be called after user interaction.
    */
   init() {
     if (!this.ctx) {
@@ -51,15 +25,11 @@ class SoundManager {
   }
 
   /**
-   *  -------------------------------------------------------------------------
-   *   playTone(frequency, type, duration, volume)
-   *  -------------------------------------------------------------------------
-   *  Goal: Play a single beep.
-   * 
-   *  @param {number} frequency - Pitch in Hz (e.g., 440 is A4).
-   *  @param {string} type - Wave shape ('square', 'sine', 'sawtooth').
-   *  @param {number} duration - How long in seconds (e.g., 0.1).
-   *  @param {number} volume - How loud (0.0 to 1.0).
+   * Plays a single synthesized tone.
+   * @param {number} frequency - Pitch in Hz.
+   * @param {string} type - Wave shape ('square', 'sine', etc.).
+   * @param {number} duration - Duration in seconds.
+   * @param {number} volume - Gain (0.0 to 1.0).
    */
   playTone(frequency, type, duration, volume = 0.1) {
     // 1. Safety Checks
@@ -91,24 +61,14 @@ class SoundManager {
   }
 
   /**
-   *  -------------------------------------------------------------------------
-   *   playCompare()
-   *  -------------------------------------------------------------------------
-   *  Sound: "BLIP"
-   *  Used when: Checking two numbers.
-   *  Style: High-pitched square wave (Coin sound).
+   * Plays a short 'blip' for comparisons.
    */
   playCompare() {
     this.playTone(600, 'square', 0.05, 0.05);
   }
 
   /**
-   *  -------------------------------------------------------------------------
-   *   playSwap()
-   *  -------------------------------------------------------------------------
-   *  Sound: "ZIP!"
-   *  Used when: Moving numbers.
-   *  Style: Pitch rises quickly (200Hz -> 400Hz). Action sound.
+   * Plays a rising pitch 'zip' for swaps.
    */
   playSwap() {
     if (!this.ctx || this.isMuted) return;
@@ -139,12 +99,7 @@ class SoundManager {
   }
 
   /**
-   *  -------------------------------------------------------------------------
-   *   playSorted()
-   *  -------------------------------------------------------------------------
-   *  Sound: "CHIME" (Arpeggio)
-   *  Used when: A bar locks into place.
-   *  Style: Plays a C-Major chord (C-E-G-C) very fast.
+   * Plays a fast arpeggio when a bar is sorted.
    */
   playSorted() {
     if (!this.ctx || this.isMuted) return;

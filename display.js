@@ -1,40 +1,10 @@
 /**
- *  =============================================================================
- *   DISPLAY.JS
- *  =============================================================================
- *  
- *  Purpose: 
- *  This file handles the "Eyes" of the operation. It touches the DOM (HTML).
- *  Its job is to take raw numbers and turn them into colorful bars on screen.
- *
- *  -----------------------------------------------------------------------------
- *   RENDERING PIPELINE (How numbers become bars)
- *  -----------------------------------------------------------------------------
- *  
- *    [ JavaScript Data ]          [ CSS Styles ]           [ DOM Element ]
- *  
- *       Value: 50       ---->    height: 50%     ---->     +----------+
- *       Type: 'swap'    ---->    .swapping       ---->     |          |
- *                                (bg: red)                 |   BAR    |
- *                                                          |          |
- *                                                          +----------+
- * 
+ * Handles DOM manipulation and rendering of the sorting visualization.
  */
 
 /**
- *  -------------------------------------------------------------------------
- *   renderStep(frame)
- *  -------------------------------------------------------------------------
- *  
- *  Goal: Draw the array EXACTLY as it looked at a specific moment (step).
- *  
- *  How it works:
- *  1. Accepts a `frame` object (Snapshot) containing the data.
- *  2. Clear the container (wipe the slate clean).
- *  3. Re-draw every single bar based on the `frame.array` data.
- *  4. Color the bars based on what was happening (Swap? Compare? Sorted?).
- *  
- *  @param {object} frame - The snapshot object containing 'array', 'type', etc.
+ * Renders a single frame of the sorting animation.
+ * @param {object} frame - The snapshot containing the array and state (comparison, swap, etc.).
  */
 export function renderStep(frame) {
   // 1. Find the container in the HTML where bars go
@@ -103,10 +73,7 @@ export function renderStep(frame) {
 }
 
 /**
- *  -------------------------------------------------------------------------
- *   triggerCompletionWave()
- *  -------------------------------------------------------------------------
- *  Goal: Run a "Success" animation when sorting is done.
+ * Triggers a completion animation on the sorted bars.
  */
 export function triggerCompletionWave() {
   const bars = document.querySelectorAll('.bar');
