@@ -66,3 +66,90 @@ header {
   display: flex;
   align-items: center;
 }
+
+
+#visualization-container {
+  display: flex;
+  align-items: flex-end;
+  width: 90%;
+  height: 60vh;
+  margin: 2rem auto;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  position: relative;
+  /* Context for absolute Mario */
+  overflow: hidden;
+  /* Keep Mario inside */
+}
+
+.bar {
+  flex-grow: 1;
+  background-color: rgb(172, 170, 170);
+  border-radius: 5px 5px 0px 0px;
+  margin: 0 1px;
+  transition: background-color 0.1s;
+}
+
+.comparing {
+  background-color: orange !important;
+}
+
+.swapping {
+  background-color: greenyellow !important;
+}
+
+.sorted {
+  background-color: skyblue !important;
+}
+
+/* --- INTERACTIVITY --- */
+
+/* 1. Value Tooltip (via data-value attribute) */
+.bar:hover::after {
+  content: attr(data-value);
+  /* Read the number from HTML */
+  position: absolute;
+  bottom: 0px;
+  /* Position text at bottom of bar */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  pointer-events: none;
+  /* Let clicks pass through */
+  z-index: 10;
+  white-space: nowrap;
+}
+
+/* 2. Hover Effect */
+.bar:hover {
+  filter: brightness(0.9);
+  /* Slight dim to show focus */
+}
+
+/* --- ANIMATIONS --- */
+
+/* Completion Wave */
+@keyframes ripple {
+  0% {
+    transform: scaleY(1);
+    filter: brightness(1);
+  }
+
+  50% {
+    transform: scaleY(1.1);
+    filter: brightness(1.2);
+  }
+
+  100% {
+    transform: scaleY(1);
+    filter: brightness(1);
+  }
+}
+
+.finished {
+  animation: ripple 0.3s ease-in-out;
+}

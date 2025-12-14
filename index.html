@@ -10,39 +10,43 @@
 
 <body>
   <header>
-    <h1>Bubble Sort Visualizer </h1>
+    <h1>Bubble Sort Visualizer</h1>
     <div id="controls">
-      <!-- Generate Array -->
       <div class="control-group">
-        <label for="arraySize">Size:</label>
-        <input type="number" id="arraySize" min="5" max="100" value="10">
-        <button id="generateArray">Generate</button>
+        <label for="array-size">Size:</label>
+        <input type="number" id="array-size" min="5" max="100" value="20">
+        <button id="generate-array-btn">New Array</button>
       </div>
-      <!-- control sorting speed -->
+
       <div class="control-group">
         <label for="speed-slider">Speed:</label>
-        <input type="range" id="speed-slider" min="1" max="100" value="50">
+        <input type="range" name="speed-slider" id="speed-slider" min="1" max="100" value="50">
       </div>
-      <!-- States button -->
-      <div class="control-group">
-        <button id="step-back-btn" title="Step back"> <span>&#8592;</span>Prev</button>
-        <button id="play-pause-btn" title="Play/Pause">Play</button>
-        <button id="step-fwd-btn" title="Step forward">Next<span>&#8594;</span></button>
-        <button id="reset-btn" title="Reset to Start">Reset</button>
-      </div>
-      <!-- optimized checkbox -->
+
       <div class="control-group">
         <label for="optimized-checkbox">
           <input type="checkbox" id="optimized-checkbox">
           Optimized
         </label>
       </div>
-      <!-- step counter -->
+
       <div class="control-group">
-        <span id="step-counter">Steps: 0 / 0</span>
+        <button id="step-back-btn" title="Step Back">
+          <span>&#8592;</span> Prev
+        </button>
+        <button id="play-pause-btn" title="Play/Pause">Play</button>
+        <button id="step-fwd-btn" title="Step Forward">
+          Next <span>&#8594;</span>
+        </button>
+        <button id="reset-btn" title="Reset to Start">Reset</button>
+      </div>
+      <div class="control-group">
+        <span id="step-counter" style="color: #ddd; font-size: 0.9rem;">Steps: 0 / 0</span>
       </div>
     </div>
   </header>
+  <main id="visualization-container"></main>
+  <script type="module" src="controller.js"></script>
 </body>
 
 </html>
