@@ -1,0 +1,68 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  /* A robust web-safe monospace font stack */
+  font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Console", monospace;
+}
+
+button {
+  font-family: inherit;
+  padding: .5rem 1rem;
+}
+
+header {
+  background-color: #111;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+}
+
+#controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1rem 0;
+  padding: 0.5rem;
+  /* Add some padding */
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: #222;
+  /* Slight contrast for groups */
+  border-radius: 4px;
+}
+
+.control-group label {
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+.control-group input[type="number"] {
+  width: 60px;
+  padding: 0.3rem;
+  border: none;
+  border-radius: 3px;
+}
+
+.control-group input[type="checkbox"] {
+  margin-right: 0.5rem;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.control-group label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
