@@ -29,9 +29,6 @@ export function generateRandomArray(size) {
   return newArray;
 }
 
-
-
-
 /**
  * Generates the history steps for standard Bubble Sort.
  * Records comparisons, swaps, and finalizations.

@@ -26,13 +26,13 @@ export function renderStep(frame) {
   // frame.array is the list of numbers at this moment, e.g., [10, 55, 3...]
   frame.array.forEach((value, i) => {
 
-    // A. Create the DIV element
+    // Create the DIV element
     const bar = document.createElement('div');
 
-    // B. Add the CSS class 'bar' (gives it width, color, etc.)
+    // Add the CSS class 'bar' (gives it width, color, etc.)
     bar.classList.add('bar');
 
-    // C. Set the Height dynamically
+    // Set the Height dynamically
     // Formula: (Value / 100) * 100 = Percentage
     // Example: Value 50 -> 50% height
     bar.style.height = `${(value / maxVal) * 100}%`;

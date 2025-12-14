@@ -6,7 +6,7 @@ class SoundManager {
   // Initializes audio context and settings.
   constructor() {
     this.isMuted = false;     // Master Mute Switch
-    this.oscillatorType = 'square'; // The "Voice" (Square = Nintendo/8-bit sound)
+    this.oscillatorType = 'square'; // The "Voice" (8-bit sound)
   }
 
   /**
@@ -129,13 +129,6 @@ class SoundManager {
       osc.stop(start + 0.1);
     });
   }
-
-  // Explicitly defining playJump if needed for future, currently unused/removed visually
-  // Keeping logic is fine, naming conflict resolved previously.
-  playJump() {
-    // Placeholder or repurposed if we want jump sound logic for other things
-  }
 }
 
-// Create one instance for the whole app to share
 export const audioManager = new SoundManager();

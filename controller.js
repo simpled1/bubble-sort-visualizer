@@ -46,9 +46,6 @@ const resetBtn = document.getElementById('reset-btn');             // Reset
 const optimizedCheckbox = document.getElementById('optimized-checkbox'); // Optimized toggle
 const stepCounter = document.getElementById('step-counter'); // Steps: 0 / 100
 
-
-
-
 /**
  * Resets the state and prepares a new sorting simulation.
  */
@@ -229,22 +226,16 @@ function updateControls() {
   // Safety check
   if (!sortingHistory.length) return;
 
-  // UX: Disable "Back" if at start
+  // Disable "Back" if at start
   stepBackBtn.disabled = currentStep === 0;
 
-  // UX: Disable "Forward" if at end
+  // Disable "Forward" if at end
   stepFwdBtn.disabled = currentStep === sortingHistory.length - 1;
 
-  // UX: Update step counter text
+  // Update step counter text
   stepCounter.textContent = `Steps: ${currentStep} / ${sortingHistory.length - 1}`;
 }
 
-/**
- *  =============================================================================
- *   EVENT LISTENERS (Waiting for execution)
- *  =============================================================================
- *  Wiring up the HTML buttons to the JavaScript functions.
- */
 
 // "Generate New Array" -> Init()
 generateBtn.addEventListener('click', init);
